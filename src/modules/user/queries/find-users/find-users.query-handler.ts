@@ -2,7 +2,7 @@ import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { Ok, Result } from 'oxide.ts';
 import { PaginatedParams, PaginatedQueryBase } from '@libs/ddd/query.base';
 import { Paginated } from '@src/libs/ddd';
-import { PrismaService } from '@src/libs/db/prisma.service';
+import { PrismaService } from '@src/infrastructure/persistence/prisma/prisma.service';
 import { UserModel } from '../../database/user.repository';
 
 export class FindUsersQuery extends PaginatedQueryBase {

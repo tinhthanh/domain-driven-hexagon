@@ -39,7 +39,7 @@ model Wallet {
   userId    String   @unique(map: "UQ_35472b1fe48b6330cd349709564") @db.VarChar
 
   // Relations
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("wallets")
 }

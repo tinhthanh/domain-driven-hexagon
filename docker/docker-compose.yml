@@ -7,9 +7,9 @@ services:
     ports:
       - 5432:5432
     environment:
-      POSTGRES_USER: 'user'
-      POSTGRES_PASSWORD: 'password'
-      POSTGRES_DB: 'ddh'
+      POSTGRES_USER: ${DB_USERNAME:-user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-password}
+      POSTGRES_DB: ${DB_NAME:-ddh}
     volumes:
       - ddh-postgres:/var/lib/postgresql/data
     networks:
@@ -19,8 +19,8 @@ services:
     container_name: pgadmin_container
     image: dpage/pgadmin4
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@email.com
-      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL:-admin@email.com}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-admin}
     ports:
       - 5050:80
     networks:

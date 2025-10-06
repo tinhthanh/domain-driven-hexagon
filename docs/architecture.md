@@ -4,6 +4,75 @@
 
 This application implements **Domain-Driven Design (DDD)** and **Hexagonal Architecture** patterns to create a maintainable, testable, and scalable codebase.
 
+## C4 Model - System Context Diagram
+
+```mermaid
+C4Context
+    title System Context Diagram for Domain-Driven Hexagon
+
+    Person(user, "User", "A user of the system")
+    System(ddh, "Domain-Driven Hexagon", "Manages users and wallets using DDD and Hexagonal Architecture")
+    System_Ext(db, "PostgreSQL Database", "Stores user and wallet data")
+
+    Rel(user, ddh, "Uses", "HTTP/GraphQL")
+    Rel(ddh, db, "Reads from and writes to", "Prisma ORM")
+```
+
+## C4 Model - Container Diagram
+
+```mermaid
+C4Container
+    title Container Diagram for Domain-Driven Hexagon
+
+    Person(user, "User", "A user of the system")
+
+    Container_Boundary(ddh, "Domain-Driven Hexagon") {
+        Container(api, "NestJS Application", "Node.js, TypeScript", "Provides REST API, GraphQL API, and CLI")
+        ContainerDb(cache, "In-Memory Cache", "Node.js", "Caches frequently accessed data")
+    }
+
+    System_Ext(db, "PostgreSQL Database", "Stores user and wallet data")
+
+    Rel(user, api, "Uses", "HTTPS/GraphQL")
+    Rel(api, db, "Reads from and writes to", "Prisma ORM")
+    Rel(api, cache, "Reads from and writes to")
+```
+
+## C4 Model - Component Diagram
+
+```mermaid
+C4Component
+    title Component Diagram for NestJS Application
+
+    Container_Boundary(api, "NestJS Application") {
+        Component(rest, "REST Controllers", "NestJS Controllers", "Handles HTTP requests")
+        Component(graphql, "GraphQL Resolvers", "NestJS GraphQL", "Handles GraphQL queries/mutations")
+        Component(cli, "CLI Controllers", "nestjs-command", "Handles CLI commands")
+
+        Component(commands, "Command Handlers", "CQRS", "Processes write operations")
+        Component(queries, "Query Handlers", "CQRS", "Processes read operations")
+        Component(events, "Event Handlers", "EventEmitter2", "Handles domain events")
+
+        Component(domain, "Domain Layer", "Entities, Value Objects", "Core business logic")
+        Component(repos, "Repositories", "Prisma", "Data access layer")
+    }
+
+    System_Ext(db, "PostgreSQL Database", "Stores data")
+
+    Rel(rest, commands, "Uses")
+    Rel(rest, queries, "Uses")
+    Rel(graphql, commands, "Uses")
+    Rel(graphql, queries, "Uses")
+    Rel(cli, commands, "Uses")
+
+    Rel(commands, domain, "Uses")
+    Rel(queries, repos, "Uses")
+    Rel(commands, repos, "Uses")
+    Rel(domain, events, "Publishes")
+
+    Rel(repos, db, "Reads/Writes")
+```
+
 ## Core Principles
 
 ### 1. Domain-Driven Design (DDD)

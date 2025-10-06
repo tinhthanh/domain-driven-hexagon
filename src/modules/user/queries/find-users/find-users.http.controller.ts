@@ -22,7 +22,7 @@ export class FindUsersHttpController {
     type: UserPaginatedResponseDto,
   })
   async findUsers(
-    @Body() request: FindUsersRequestDto,
+    @Query() request: FindUsersRequestDto,
     @Query() queryParams: PaginatedQueryRequestDto,
   ): Promise<UserPaginatedResponseDto> {
     const query = new FindUsersQuery({

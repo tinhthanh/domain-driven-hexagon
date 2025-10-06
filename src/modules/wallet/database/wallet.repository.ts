@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import { PrismaRepositoryBase } from '@src/libs/db/prisma-repository.base';
-import { PrismaService } from '@src/libs/db/prisma.service';
+import { PrismaRepositoryBase } from '@src/infrastructure/persistence/prisma/prisma-repository.base';
+import { PrismaService } from '@src/infrastructure/persistence/prisma/prisma.service';
 import { WalletRepositoryPort } from './wallet.repository.port';
 import { WalletEntity } from '../domain/wallet.entity';
 import { WalletMapper } from '../wallet.mapper';

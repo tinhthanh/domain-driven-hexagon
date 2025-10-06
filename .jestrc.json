@@ -5,7 +5,9 @@
   "coverageDirectory": "../tests/coverage",
   "setupFilesAfterEnv": ["./tests/setup/jestSetupAfterEnv.ts"],
   "globalSetup": "<rootDir>/tests/setup/jestGlobalSetup.ts",
+  "globalTeardown": "<rootDir>/tests/setup/jestGlobalTeardown.ts",
   "testRegex": ".spec.ts$",
+  "testTimeout": 60000,
 
   "transform": {
     "^.+\\.ts$": ["ts-jest", {

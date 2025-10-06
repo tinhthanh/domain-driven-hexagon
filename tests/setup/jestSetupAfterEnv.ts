@@ -1,7 +1,7 @@
 import { Test, TestingModuleBuilder, TestingModule } from '@nestjs/testing';
 import { AppModule } from '@src/app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
-import { PrismaService } from '@src/libs/db/prisma.service';
+import { PrismaService } from '@src/infrastructure/persistence/prisma/prisma.service';
 import * as request from 'supertest';
 import { ValidationPipe } from '@nestjs/common';
 

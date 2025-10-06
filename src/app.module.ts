@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
-import { PrismaModule } from '@libs/db/prisma.module';
+import { PrismaModule } from '@src/infrastructure/persistence/prisma/prisma.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { UserModule } from '@modules/user/user.module';
 import { WalletModule } from '@modules/wallet/wallet.module';

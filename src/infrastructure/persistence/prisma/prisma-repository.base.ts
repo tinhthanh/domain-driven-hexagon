@@ -6,8 +6,8 @@ import { ConflictException } from '@libs/exceptions';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { None, Option, Some } from 'oxide.ts';
 import { PrismaClient, Prisma } from '@prisma/client';
-import { LoggerPort } from '../ports/logger.port';
-import { ObjectLiteral } from '../types';
+import { LoggerPort } from '@libs/ports/logger.port';
+import { ObjectLiteral } from '@libs/types';
 
 export abstract class PrismaRepositoryBase<
   Aggregate extends AggregateRoot<any>,
@@ -38,7 +38,9 @@ export abstract class PrismaRepositoryBase<
 
   async findAll(): Promise<Aggregate[]> {
     const results = await this.getDelegate().findMany();
-    return results.map((result) => this.mapper.toDomain(result as DbModel));
+    return results.map((result: unknown) =>
+      this.mapper.toDomain(result as DbModel),
+    );
   }
 
   async findAllPaginated(
@@ -52,7 +54,7 @@ export abstract class PrismaRepositoryBase<
       this.getDelegate().count(),
     ]);
 
-    const entities = results.map((result) =>
+    const entities = results.map((result: unknown) =>
       this.mapper.toDomain(result as DbModel),
     );
 

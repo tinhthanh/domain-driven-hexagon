@@ -3,8 +3,8 @@ import { z } from 'zod';
 import { UserMapper } from '../user.mapper';
 import { UserRoles } from '../domain/user.types';
 import { UserEntity } from '../domain/user.entity';
-import { PrismaRepositoryBase } from '@src/libs/db/prisma-repository.base';
-import { PrismaService } from '@src/libs/db/prisma.service';
+import { PrismaRepositoryBase } from '@src/infrastructure/persistence/prisma/prisma-repository.base';
+import { PrismaService } from '@src/infrastructure/persistence/prisma/prisma.service';
 import { Injectable, Logger } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 
