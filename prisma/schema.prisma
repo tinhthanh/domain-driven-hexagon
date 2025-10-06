@@ -1,0 +1,45 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Migration {
+  name String   @id
+  hash String
+  date DateTime @default(now()) @db.Timestamptz(6)
+
+  @@map("migration")
+}
+
+model User {
+  id         String   @id(map: "PK_cace4a159ff9f2512dd42373760") @db.VarChar
+  createdAt  DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt  DateTime @default(now()) @db.Timestamptz(6)
+  email      String   @unique(map: "UQ_e12875dfb3b1d92d7d7c5377e22") @db.VarChar
+  country    String   @db.VarChar
+  postalCode String   @db.VarChar
+  street     String   @db.VarChar
+  role       String   @db.VarChar
+
+  // Relations
+  wallet     Wallet?
+
+  @@map("users")
+}
+
+model Wallet {
+  id        String   @id(map: "PK_bec464dd8d54c39c54fd32e2334") @db.VarChar
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @default(now()) @db.Timestamptz(6)
+  balance   Int      @default(0)
+  userId    String   @unique(map: "UQ_35472b1fe48b6330cd349709564") @db.VarChar
+
+  // Relations
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@map("wallets")
+}

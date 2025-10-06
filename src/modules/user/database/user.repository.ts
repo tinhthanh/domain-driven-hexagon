@@ -1,11 +1,10 @@
-import { InjectPool } from 'nestjs-slonik';
-import { DatabasePool, sql } from 'slonik';
 import { UserRepositoryPort } from './user.repository.port';
 import { z } from 'zod';
 import { UserMapper } from '../user.mapper';
 import { UserRoles } from '../domain/user.types';
 import { UserEntity } from '../domain/user.entity';
-import { SqlRepositoryBase } from '@src/libs/db/sql-repository.base';
+import { PrismaRepositoryBase } from '@src/libs/db/prisma-repository.base';
+import { PrismaService } from '@src/libs/db/prisma.service';
 import { Injectable, Logger } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 
@@ -32,37 +31,49 @@ export type UserModel = z.TypeOf<typeof userSchema>;
  * */
 @Injectable()
 export class UserRepository
-  extends SqlRepositoryBase<UserEntity, UserModel>
+  extends PrismaRepositoryBase<UserEntity, UserModel>
   implements UserRepositoryPort
 {
   protected tableName = 'users';
 
-  protected schema = userSchema;
-
   constructor(
-    @InjectPool()
-    pool: DatabasePool,
+    prisma: PrismaService,
     mapper: UserMapper,
     eventEmitter: EventEmitter2,
   ) {
-    super(pool, mapper, eventEmitter, new Logger(UserRepository.name));
+    super(prisma, mapper, eventEmitter, new Logger(UserRepository.name));
+  }
+
+  protected getDelegate() {
+    return this.client.user;
   }
 
   async updateAddress(user: UserEntity): Promise<void> {
     const address = user.getProps().address;
-    const statement = sql.type(userSchema)`
-    UPDATE "users" SET
-    street = ${address.street}, country = ${address.country}, "postalCode" = ${address.postalCode}
-    WHERE id = ${user.id}`;
 
-    await this.writeQuery(statement, user);
+    await this.writeQuery(
+      () =>
+        this.getDelegate().update({
+          where: { id: user.id },
+          data: {
+            street: address.street,
+            country: address.country,
+            postalCode: address.postalCode,
+          },
+        }),
+      user,
+    );
   }
 
   async findOneByEmail(email: string): Promise<UserEntity> {
-    const user = await this.pool.one(
-      sql.type(userSchema)`SELECT * FROM "users" WHERE email = ${email}`,
-    );
+    const user = await this.getDelegate().findUnique({
+      where: { email },
+    });
 
-    return this.mapper.toDomain(user);
+    if (!user) {
+      throw new Error(`User with email ${email} not found`);
+    }
+
+    return this.mapper.toDomain(user as UserModel);
   }
 }

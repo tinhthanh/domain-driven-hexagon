@@ -1,7 +1,6 @@
-import { InjectPool } from 'nestjs-slonik';
-import { DatabasePool } from 'slonik';
 import { z } from 'zod';
-import { SqlRepositoryBase } from '@src/libs/db/sql-repository.base';
+import { PrismaRepositoryBase } from '@src/libs/db/prisma-repository.base';
+import { PrismaService } from '@src/libs/db/prisma.service';
 import { WalletRepositoryPort } from './wallet.repository.port';
 import { WalletEntity } from '../domain/wallet.entity';
 import { WalletMapper } from '../wallet.mapper';
@@ -20,19 +19,20 @@ export type WalletModel = z.TypeOf<typeof walletSchema>;
 
 @Injectable()
 export class WalletRepository
-  extends SqlRepositoryBase<WalletEntity, WalletModel>
+  extends PrismaRepositoryBase<WalletEntity, WalletModel>
   implements WalletRepositoryPort
 {
   protected tableName = 'wallets';
 
-  protected schema = walletSchema;
-
   constructor(
-    @InjectPool()
-    pool: DatabasePool,
+    prisma: PrismaService,
     mapper: WalletMapper,
     eventEmitter: EventEmitter2,
   ) {
-    super(pool, mapper, eventEmitter, new Logger(WalletRepository.name));
+    super(prisma, mapper, eventEmitter, new Logger(WalletRepository.name));
+  }
+
+  protected getDelegate() {
+    return this.client.wallet;
   }
 }

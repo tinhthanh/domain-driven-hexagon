@@ -6,6 +6,17 @@
   "setupFilesAfterEnv": ["./tests/setup/jestSetupAfterEnv.ts"],
   "globalSetup": "<rootDir>/tests/setup/jestGlobalSetup.ts",
   "testRegex": ".spec.ts$",
+
+  "transform": {
+    "^.+\\.ts$": ["ts-jest", {
+      "tsconfig": {
+        "allowJs": true
+      }
+    }]
+  },
+  "transformIgnorePatterns": [
+    "node_modules/(?!(@prisma/client)/)"
+  ],
   "moduleNameMapper": {
     "@src/(.*)$": "<rootDir>/src/$1",
     "@modules/(.*)$": "<rootDir>/src/modules/$1",
@@ -14,7 +25,5 @@
     "@exceptions$": "<rootDir>/src/libs/exceptions",
     "@tests/(.*)$": "<rootDir>/tests/$1"
   },
-  "transform": {
-    "^.+\\.(t|j)s$": "ts-jest"
-  }
+  "preset": "ts-jest"
 }

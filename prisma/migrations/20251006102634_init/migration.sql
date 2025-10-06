@@ -1,0 +1,42 @@
+-- CreateTable
+CREATE TABLE "migration" (
+    "name" TEXT NOT NULL,
+    "hash" TEXT NOT NULL,
+    "date" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "migration_pkey" PRIMARY KEY ("name")
+);
+
+-- CreateTable
+CREATE TABLE "users" (
+    "id" VARCHAR NOT NULL,
+    "createdAt" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "email" VARCHAR NOT NULL,
+    "country" VARCHAR NOT NULL,
+    "postalCode" VARCHAR NOT NULL,
+    "street" VARCHAR NOT NULL,
+    "role" VARCHAR NOT NULL,
+
+    CONSTRAINT "PK_cace4a159ff9f2512dd42373760" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "wallets" (
+    "id" VARCHAR NOT NULL,
+    "createdAt" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "balance" INTEGER NOT NULL DEFAULT 0,
+    "userId" VARCHAR NOT NULL,
+
+    CONSTRAINT "PK_bec464dd8d54c39c54fd32e2334" PRIMARY KEY ("id")
+);
+
+-- CreateIndex
+CREATE UNIQUE INDEX "UQ_e12875dfb3b1d92d7d7c5377e22" ON "users"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "UQ_35472b1fe48b6330cd349709564" ON "wallets"("userId");
+
+-- AddForeignKey
+ALTER TABLE "wallets" ADD CONSTRAINT "wallets_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
