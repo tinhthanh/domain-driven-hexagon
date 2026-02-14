@@ -5,7 +5,10 @@ import { RepositoryPort } from '@libs/ddd';
 import { ConflictException } from '@libs/exceptions';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { None, Option, Some } from 'oxide.ts';
-import { PrismaClient, Prisma } from '@prisma/client';
+import {
+  PrismaClient,
+  Prisma,
+} from '../../../../prisma/generated/prisma/client';
 import { LoggerPort } from '@libs/ports/logger.port';
 import { ObjectLiteral } from '@libs/types';
 

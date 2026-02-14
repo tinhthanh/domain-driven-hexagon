@@ -6,7 +6,7 @@ export class UserGraphqlResponseDto extends ResponseBase {
   @Field({
     description: "User's identifier",
   })
-  id: string;
+  declare id: string;
 
   @Field({
     description: "User's email address",
